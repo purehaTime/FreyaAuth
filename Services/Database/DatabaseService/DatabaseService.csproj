@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>adafdb1c-35c0-4228-b34d-d058da8debdd</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Libraries\ConfigHelper\ConfigHelper.csproj" />
+      <ProjectReference Include="..\..\..\Libraries\GrpcHelper\GrpcHelper.csproj" />
+      <ProjectReference Include="..\..\..\Libraries\LogsHelper\LogsHelper.csproj" />
+      <ProjectReference Include="..\..\..\Libraries\Models\Models.csproj" />
+    </ItemGroup>
+
+
+
+
+</Project>

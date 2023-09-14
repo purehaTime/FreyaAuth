@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.18.0" />
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NUnit" Version="3.13.3"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="4.4.2"/>
+        <PackageReference Include="NUnit.Analyzers" Version="3.6.1"/>
+        <PackageReference Include="coverlet.collector" Version="3.2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Libraries\ConfigHelper\ConfigHelper.csproj" />
+      <ProjectReference Include="..\Libraries\GrpcHelper\GrpcHelper.csproj" />
+      <ProjectReference Include="..\Libraries\LogsHelper\LogsHelper.csproj" />
+      <ProjectReference Include="..\Libraries\Models\Models.csproj" />
+      <ProjectReference Include="..\Services\Auth\AuthService\AuthService.csproj" />
+      <ProjectReference Include="..\Services\Dashboard\Dashboard.csproj" />
+      <ProjectReference Include="..\Services\Database\DatabaseService\DatabaseService.csproj" />
+    </ItemGroup>
+
+</Project>

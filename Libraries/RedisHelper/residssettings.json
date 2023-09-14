@@ -1,0 +1,4 @@
+﻿{
+  "RedisUrl" : "http://redis:6379",
+  "RedisPass" : "test-user"
+}

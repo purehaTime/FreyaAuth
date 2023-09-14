@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcHelper.Proto.Common";
+import "Protos/common/error.proto";
+
+package Main;
+
+message Status {
+  bool Complete = 1;
+  Error.Error Error = 2;
+}
+
+message Id {
+  string ObjectId = 1;
+}
+

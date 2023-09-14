@@ -1,0 +1,96 @@
+version: '3.9'
+
+services:
+  storage:
+    container_name: 'Storage'
+    restart: on-failure
+    env_file: .env
+    ports:
+      - "27017:27017"
+    volumes:
+      - storagedb:/data/db
+      - storagedb:/data/configdb
+
+  elasticsearch:
+    container_name: 'Elastic'
+    restart: on-failure
+    env_file: .env
+    volumes:
+      - elasticdata:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+    networks:
+      - es-net
+    ports:
+      - "9200:9200"
+
+  kibana:
+    container_name: 'Kibana'
+    restart: on-failure
+    env_file: .env
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+    networks:
+      - es-net
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+
+  redis:
+    container_name: Redis
+    restart: always
+    env_file: .env
+    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+
+  dashboard:
+    container_name: 'Dashboard'
+    env_file: .env
+    ports:
+      - "15000:80"
+      - "15001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  databaseservice:
+    container_name: 'Database'
+    env_file: .env
+    expose:
+      - "15010:80"
+      - "15011:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  authservice:
+    container_name: 'Auth'
+    env_file: .env
+    ports:
+      - "15020:80"
+      - "15021:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+volumes:
+  storagedb: 
+    name: 'StorageDb'
+    external: false
+  elasticdata:
+    driver: local
+    name: 'ElasticData'
+  logstorage:
+    name: 'Logs'
+    external: false
+  redis:
+    name: 'Redis'
+    external: false
+
+networks:
+  es-net:
+    driver: bridge

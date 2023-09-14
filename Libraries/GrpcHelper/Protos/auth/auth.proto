@@ -1,0 +1,22 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcHelper.Proto.Auth";
+package Auth;
+
+import "Protos/common/error.proto";
+
+service Auth {
+  rpc ValidateUser(TokenRequest) returns (TokensResponse);
+  rpc UpdateToken(TokenRequest) returns (TokensResponse);
+}
+
+message TokensResponse {
+  string AuthToken = 1;
+  string RefreshToken = 2;
+  Error.Error Error = 3;
+}
+
+message TokenRequest {
+  string AuthToken = 1;
+  string RefreshToken = 2;
+}

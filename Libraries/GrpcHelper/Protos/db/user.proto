@@ -1,0 +1,67 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcHelper.Proto.Db";
+package User;
+
+import "Protos/common/error.proto";
+import "Protos/common/main.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/type.proto";
+
+service User {
+  rpc CreateUser(UserModel) returns (Main.Status);
+  rpc GetRefreshToken(Main.Id) returns (RefreshTokenResponse);
+  rpc UpdateRefreshToken(UpdateTokenRequest) returns (Main.Status);
+  rpc GetUserByEmail(EmailRequest) returns (UserModelResponse);
+}
+
+message RefreshTokenResponse {
+  string Token = 1;
+  google.protobuf.Timestamp Expired = 2;
+  Error.Error Error = 3;
+}
+
+message UpdateTokenRequest {
+  string UserId = 1;
+  string Token = 2;
+}
+
+enum OAuthType {
+  O_Auth_Type_Internal = 0;
+  O_Auth_Type_Google = 1;
+  O_Auth_Type_Vk = 2;
+}
+
+enum Roles {
+  Roles_Creator = 0;
+  Roles_Moderator = 1;
+  Roles_User = 2;
+}
+
+message UserModel {
+  string Id = 1;
+  string Email = 2;
+  google.protobuf.StringValue PhoneNumber = 3;
+  string PasswordHash = 4;
+  google.protobuf.StringValue DisplayName = 5;
+  bool Verified = 6;
+  google.protobuf.Timestamp Created = 7;
+  google.protobuf.Timestamp PasswordChanged = 8;
+  bool Locked = 9;
+  google.protobuf.Timestamp LockedDate = 10;
+  Roles Role = 11;
+  string RefreshToken = 12;
+  google.protobuf.Timestamp RefreshTokenExpire = 13;
+  string VerificationToken = 14;
+  google.protobuf.Timestamp VerificationTokenExpire = 15;
+}
+
+message EmailRequest {
+  string Email = 1;
+}
+
+message UserModelResponse {
+    UserModel User = 1;
+    Error.Error Error = 2;
+}

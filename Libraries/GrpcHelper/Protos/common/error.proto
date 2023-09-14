@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcHelper.Proto.Common";
+
+package Error;
+
+message Error {
+  int32 Code = 1;
+  string Message = 2;
+  ErrorLevel Level = 3;
+  string StackTrace = 4;
+}
+
+enum ErrorLevel {
+  ERROR_LEVEl_INFORM = 0;
+  ERROR_LEVEL_MEDIUM = 1;
+  ERROR_LEVEL_CRITICAL = 2;
+}

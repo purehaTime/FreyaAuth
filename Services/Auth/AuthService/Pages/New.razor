@@ -1,0 +1,94 @@
+﻿@page "/new"
+@using Models.Models.AuthService
+@using AuthService.Interfaces
+@inject IUserService _userService
+@inject IHttpContextAccessor _httpContext
+
+<MudStack Justify="Justify.Center" Style="height: 60vh">
+    <MudContainer MaxWidth="MaxWidth.ExtraSmall" Class="rounded-sm">
+        @if (!_complete) 
+        {
+            <MudForm @bind-IsValid="_isSuccess" @ref="_form" Model="@_loginModel">
+                <MudCard>
+                    <MudCardHeader Class="d-flex justify-center">
+                        <MudText Typo="Typo.h4">Registration</MudText>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudStack>
+                            <MudTextField T="string"
+                                          Label="Login"
+                                          Required="true"
+                                          RequiredError="Login is required!"
+                                          @bind-Value="_loginModel.Email "/>
+                            <MudTextField T="string"
+                                          Label="Password"
+                                          InputType="InputType.Password"
+                                          Required="true"
+                                          RequiredError="Password is required!"
+                                          @bind-Value="_loginModel.Password"/>
+                            <MudTextField T="string"
+                                          Label="Password"
+                                          HelperText="Repeat the password"
+                                          InputType="InputType.Password"
+                                          Required="true"
+                                          RequiredError="Please, repeat the password"
+                                          Validation="@(new Func<string, string>(PasswordMatch))"
+                                          @bind-Value="_repeatPassword"/>
+                        </MudStack>
+                    </MudCardContent>
+                    <MudCardActions Class="d-flex justify-center">
+                        <MudButton Class="mud-theme-primary" OnClick="Registration" Disabled="@_loading">Continue</MudButton>
+                    </MudCardActions>
+                    <MudOverlay Visible="_overlayVisible" DarkBackground="true" Absolute="true">
+                        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                    </MudOverlay>
+                </MudCard>
+            </MudForm>
+        }
+        else
+        {
+            <MudCard>
+                <MudCardHeader Class="d-flex justify-center">
+                    @if (authResult.IsSuccess)
+                    {
+                        <MudText Typo="Typo.h4" Color="Color.Success">Complete</MudText>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.h4" Color="Color.Error">Error</MudText>
+                    }
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>@_message</MudText>
+                </MudCardContent>
+            </MudCard>
+        }
+    </MudContainer>
+</MudStack>
+
+@code {
+    private readonly AuthModel _loginModel = new();
+    private string _repeatPassword;
+    private bool _loading = false;
+    private bool _isSuccess;
+    private bool _complete = false;
+    private string _message = "";
+    private MudForm _form;
+    private bool _overlayVisible;
+    private UserAuthResult authResult = new();
+    
+    public async Task Registration()
+    {
+        _overlayVisible = true;
+        _loginModel.IPAddress = _httpContext.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        authResult = await _userService.Register(_loginModel);
+        _message = authResult.Message;
+        _complete = true;
+    }
+
+    private string PasswordMatch(string pass)
+    {
+        return _repeatPassword == _loginModel.Password ? null : "Passwords don't match";
+    }
+
+}
