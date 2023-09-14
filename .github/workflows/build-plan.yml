@@ -21,9 +21,9 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore FreyaBot.sln
+      run: dotnet restore FreyaAuth.sln
     - name: Build solution
-      run: dotnet build FreyaBot.sln --no-restore
+      run: dotnet build FreyaAuth.sln --no-restore
     
 #    - name: Test solution
 #      run: dotnet test FreyaBot.sln --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
